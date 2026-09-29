@@ -22,7 +22,7 @@ html {
 #about,
 #services,
 #contact {
-  scroll-margin-top: 78px;
+  scroll-margin-top: 90px;
 }
 
 body {
@@ -63,7 +63,7 @@ textarea {
   display: grid;
   grid-template-columns: minmax(160px, 1fr) auto minmax(150px, 1fr);
   align-items: center;
-  min-height: 74px;
+  min-height: 100px;
   padding: 0 8vw;
   background: rgba(236, 239, 230, 0.58);
   color: #070807;
@@ -79,20 +79,20 @@ textarea {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: 0.78rem;
+  gap: 14px;
+  font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.2;
 }
 
 .brand img {
-  width: 54px;
-  height: 34px;
+  width: 112px;
+  height: 72px;
   object-fit: contain;
 }
 
 .brand span {
-  max-width: 140px;
+  max-width: 200px;
 }
 
 .main-nav {
@@ -143,14 +143,24 @@ textarea {
 }
 
 .hero-media,
-.hero-media img {
+.hero-slide,
+.hero-slide img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
 }
 
-.hero-media img {
+.hero-slide {
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.hero-slide.active {
+  opacity: 1;
+}
+
+.hero-slide img {
   object-fit: cover;
 }
 
@@ -163,7 +173,7 @@ textarea {
 
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -172,6 +182,69 @@ textarea {
   width: min(var(--max-width), calc(100% - 48px));
   margin: 0 auto;
   padding: 130px 0 88px;
+  opacity: 1;
+  transition: opacity 500ms ease;
+}
+
+.hero.hero-content-hidden .hero-content {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-controls {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  transform: translateX(-50%);
+}
+
+.hero-arrow,
+.hero-dots button {
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  background: rgba(8, 15, 10, 0.3);
+  color: var(--white);
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.hero-arrow {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  padding: 0 0 3px;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.hero-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.hero-dots button {
+  width: 11px;
+  height: 11px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.hero-arrow:hover,
+.hero-dots button:hover,
+.hero-dots button.active {
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(246, 212, 67, 0.92);
+  color: #273122;
+}
+
+.hero-arrow:hover {
+  transform: translateY(-1px);
 }
 
 .hero-content p {
@@ -586,9 +659,9 @@ h3 {
 
 .footer-inner {
   display: grid;
-  grid-template-columns: 0.9fr repeat(3, 1fr);
-  gap: clamp(28px, 5vw, 76px);
-  width: min(var(--max-width), calc(100% - 48px));
+  grid-template-columns: 0.7fr 0.85fr 1.05fr 1.3fr;
+  gap: clamp(24px, 4vw, 56px);
+  width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
 }
 
@@ -611,12 +684,61 @@ h3 {
 
 .footer-nav {
   display: flex;
-  flex-wrap: wrap;
-  gap: 13px;
+  flex-wrap: nowrap;
+  gap: 16px;
   color: #467746;
   font-size: 0.76rem;
   font-weight: 700;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.footer-hours {
+  margin: 0 0 22px;
+  display: grid;
+  gap: 6px;
+  color: #467746;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.footer-hours div {
+  display: grid;
+  grid-template-columns: minmax(120px, auto) 1fr;
+  column-gap: 18px;
+}
+
+.footer-hours dt,
+.footer-hours dd {
+  margin: 0;
+}
+
+.footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-social a {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: rgba(255, 255, 255, 0.85);
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.footer-social a:hover {
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+.footer-social svg {
+  width: 100%;
+  height: 100%;
 }
 
 .thank-you-page .quote-band {
@@ -638,8 +760,13 @@ h3 {
 @media (max-width: 900px) {
   .site-header {
     grid-template-columns: auto auto auto;
-    min-height: 68px;
+    min-height: 90px;
     padding: 0 24px;
+  }
+
+  .brand img {
+    width: 96px;
+    height: 62px;
   }
 
   .brand span {
@@ -679,7 +806,7 @@ h3 {
 
   .main-nav {
     position: fixed;
-    inset: 68px 0 auto;
+    inset: 90px 0 auto;
     display: grid;
     gap: 0;
     padding: 22px 24px 28px;
@@ -744,6 +871,11 @@ h3 {
 @media (max-width: 560px) {
   .site-header {
     padding: 0 16px;
+  }
+
+  .brand img {
+    width: 84px;
+    height: 54px;
   }
 
   .phone-button {

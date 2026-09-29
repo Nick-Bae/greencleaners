@@ -4,6 +4,15 @@ const navToggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-nav]");
 const contactForm = document.querySelector("[data-contact-form]");
 const formNote = document.querySelector("[data-form-note]");
+const hero = document.querySelector(".hero");
+const heroSlider = document.querySelector("[data-hero-slider]");
+const heroSlides = document.querySelectorAll("[data-hero-slide]");
+const heroDots = document.querySelectorAll("[data-hero-dot]");
+const heroPrev = document.querySelector("[data-hero-prev]");
+const heroNext = document.querySelector("[data-hero-next]");
+const HERO_CONTENT_SLIDE = 1;
+let activeHeroSlide = 0;
+let heroSlideTimer;
 
 function setHeaderState() {
   header.classList.toggle("scrolled", window.scrollY > 20);
@@ -29,6 +38,52 @@ nav.addEventListener("click", (event) => {
 
 window.addEventListener("scroll", setHeaderState, { passive: true });
 setHeaderState();
+
+function showHeroSlide(index) {
+  activeHeroSlide = (index + heroSlides.length) % heroSlides.length;
+
+  heroSlides.forEach((slide, slideIndex) => {
+    slide.classList.toggle("active", slideIndex === activeHeroSlide);
+  });
+
+  heroDots.forEach((dot, dotIndex) => {
+    const isActive = dotIndex === activeHeroSlide;
+    dot.classList.toggle("active", isActive);
+    dot.setAttribute("aria-selected", String(isActive));
+  });
+
+  if (hero) {
+    hero.classList.toggle("hero-content-hidden", activeHeroSlide !== HERO_CONTENT_SLIDE);
+  }
+}
+
+function startHeroSlider() {
+  window.clearInterval(heroSlideTimer);
+  heroSlideTimer = window.setInterval(() => {
+    showHeroSlide(activeHeroSlide + 1);
+  }, 5200);
+}
+
+if (heroSlider && heroSlides.length > 1) {
+  heroPrev.addEventListener("click", () => {
+    showHeroSlide(activeHeroSlide - 1);
+    startHeroSlider();
+  });
+
+  heroNext.addEventListener("click", () => {
+    showHeroSlide(activeHeroSlide + 1);
+    startHeroSlider();
+  });
+
+  heroDots.forEach((dot, dotIndex) => {
+    dot.addEventListener("click", () => {
+      showHeroSlide(dotIndex);
+      startHeroSlider();
+    });
+  });
+
+  startHeroSlider();
+}
 
 contactForm.addEventListener("submit", async (event) => {
   if (!contactForm.hasAttribute("data-netlify")) {
